@@ -20,4 +20,13 @@ public class Projectile : MonoBehaviour
         // Destroy the projectile after a specified time
         Destroy(gameObject, lifetime);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Checks for Terrain tag when projectile collides with terrain
+        if (collision.gameObject.CompareTag("Terrain"))
+        {
+            Destroy(gameObject); // Destroys (removes) projectile if it hits terrain
+        }
+    }
 }
