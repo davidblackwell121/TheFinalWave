@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PlayerCtrl : MonoBehaviour
 {
-    public float moveSpeed;
+    public float moveSpeed; // Variable for character movement speed
     float speedX, speedY;
-    Rigidbody2D rb;
+    Rigidbody2D rb; // RigidBody variable
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,6 +16,8 @@ public class PlayerCtrl : MonoBehaviour
     [System.Obsolete]
     void Update()
     {
+        // Calculations that adjust the players X and Y position based on movement
+        // Inputs and current move speed
         speedX = Input.GetAxisRaw("Horizontal") * moveSpeed;
         speedY = Input.GetAxisRaw("Vertical") * moveSpeed;
         rb.velocity = new Vector2(speedX, speedY);

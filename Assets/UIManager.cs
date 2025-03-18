@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; // Required for UI related variables
 using TMPro; // Required for TextMeshPro variables
 
 public class UIManager : MonoBehaviour
