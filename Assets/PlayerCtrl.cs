@@ -16,6 +16,11 @@ public class PlayerCtrl : MonoBehaviour
     [System.Obsolete]
     void Update()
     {
+        // Prevent player movement if the shop is open
+        if (ShopInteraction.isShopOpen)
+        {
+            return; // Don't update movement if the shop is open
+        }
         // Calculations that adjust the players X and Y position based on movement
         // Inputs and current move speed
         speedX = Input.GetAxisRaw("Horizontal") * moveSpeed;

@@ -8,6 +8,12 @@ public class PlayerAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Prevents projectile firing if the shop is open
+        if (ShopInteraction.isShopOpen)
+        {
+            return; // Don't fire projectiles if the shop is open
+        }
+
         // Checks if the left mouse button is clicked
         if (Input.GetMouseButtonDown(0))
         {
