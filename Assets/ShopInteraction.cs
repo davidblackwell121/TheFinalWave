@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopInteraction : MonoBehaviour
 {
@@ -7,8 +8,9 @@ public class ShopInteraction : MonoBehaviour
     public GameObject InteractionText; // Reference the shop interaction text
     private bool isNearShop = false; // Check if player is near the shop
 
-    // Reference to PlayerUI
+    // Reference to PlayerUI and Shop UI close button
     public GameObject PlayerUI;
+    public Button CloseButton; 
 
     // Tracks the shop state globally
     public static bool isShopOpen = false;
@@ -19,6 +21,12 @@ public class ShopInteraction : MonoBehaviour
         if (InteractionText == null && PlayerUI != null)
         {
             InteractionText = PlayerUI.transform.Find("InteractionText").gameObject; // Find InteractionText child inside PlayerUI
+        }
+
+        // Assign the close function to the button click
+        if (CloseButton != null)
+        {
+            CloseButton.onClick.AddListener(CloseShop);
         }
     }
 
@@ -72,5 +80,13 @@ public class ShopInteraction : MonoBehaviour
     private void TogglePlayerUI(bool isShopActive)
     {
         PlayerUI.SetActive(!isShopActive); // UI is set to visible when the shop UI is not active
+    }
+
+    // Function to close the shop when the close button is clicked
+    public void CloseShop()
+    {
+        ShopPanel.SetActive(false);
+        isShopOpen = false;
+        TogglePlayerUI(false); // Ensure PlayerUI is visible again
     }
 }
