@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI waveText; // Reference to wave counter
     public Image healthBarFill; // Reference to the health bar
 
-    private int waveNumber = 1;
+    private int waveNumber = 1; // Sets the initial wave count to 1
 
     public void UpdateWaveCounter(int wave)
     {

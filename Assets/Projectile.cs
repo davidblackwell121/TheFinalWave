@@ -4,6 +4,7 @@ public class Projectile : MonoBehaviour
 {
     public float projectilespeed; // Variable to set projectile speed
     public float lifetime; // Variable to set projectile lifetime
+    public float damage = 1f; // Default damage value without buffs
 
     private new Rigidbody2D rigidbody;
 
@@ -12,10 +13,11 @@ public class Projectile : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    public void SetDirection(Vector2 direction)
+    public void SetDirection(Vector2 direction, float damageValue)
     {
         // Applying velocity to the rigidbody2D of the projectile
         rigidbody.linearVelocity = direction * projectilespeed;
+        damage = damageValue; // Apply the projectile's damage value
 
         // Destroy the projectile after a specified time
         Destroy(gameObject, lifetime);

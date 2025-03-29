@@ -8,6 +8,15 @@ public class ShopInteraction : MonoBehaviour
     public GameObject InteractionText; // Reference the shop interaction text
     private bool isNearShop = false; // Check if player is near the shop
 
+    // References for the buttons in the shop
+    public Button ShopFireBlast;
+    public Button ShopMoveSpeed;
+    public Button ShopDamage;
+
+    // References for the Player scripts to be modified by buffs
+    private PlayerCtrl playerCtrl;
+    private PlayerAttack playerAttack;
+
     // Reference to PlayerUI and Shop UI close button
     public GameObject PlayerUI;
     public Button CloseButton; 
@@ -15,8 +24,12 @@ public class ShopInteraction : MonoBehaviour
     // Tracks the shop state globally
     public static bool isShopOpen = false;
 
+    [System.Obsolete]
     void Start()
     {
+        playerCtrl = FindObjectOfType<PlayerCtrl>();
+        playerAttack = FindObjectOfType<PlayerAttack>();
+
         // Find InteractionText inside PlayerUI if not assigned
         if (InteractionText == null && PlayerUI != null)
         {
@@ -27,6 +40,26 @@ public class ShopInteraction : MonoBehaviour
         if (CloseButton != null)
         {
             CloseButton.onClick.AddListener(CloseShop);
+        }
+
+        // Creates event listener for the Fire Blast powerup button
+        if (ShopFireBlast != null)
+        {
+            ShopFireBlast.onClick.AddListener(() =>
+            {
+                playerCtrl.hasFireBlast = true;  // Give the player the FireBlast power-up
+            });
+        }
+
+        // Creates event listeners for the shop buffs by calling the player scripts
+        if (ShopMoveSpeed != null)
+        {
+            ShopMoveSpeed.onClick.AddListener(() => playerCtrl.BoostSpeed(15f, 1.5f)); // 15s, 1.5x speed
+        }
+
+        if (ShopDamage != null)
+        {
+            ShopDamage.onClick.AddListener(() => playerAttack.BoostDamage(20f)); // 20s, 2x damage boost
         }
     }
 
