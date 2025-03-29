@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float projectilespeed; // Variable to set projectile speed
+    public float projectilespeed; // Variable for the projectile speed
     public float lifetime; // Variable to set projectile lifetime
     public float damage = 1f; // Default damage value without buffs
 

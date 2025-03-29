@@ -1,34 +1,41 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class ShopInteraction : MonoBehaviour
 {
+    public GameObject PlayerUI; // Reference to the PLayer UI
     public GameObject ShopUI; // Reference to the shop UI
     public GameObject ShopPanel; // Reference to the shop panel
     public GameObject InteractionText; // Reference the shop interaction text
-    private bool isNearShop = false; // Check if player is near the shop
+    public TextMeshProUGUI InvalidPurchaseText;
 
     // References for the buttons in the shop
     public Button ShopFireBlast;
     public Button ShopMoveSpeed;
     public Button ShopDamage;
+    public Button CloseButton;
 
     // References for the Player scripts to be modified by buffs
     private PlayerCtrl playerCtrl;
     private PlayerAttack playerAttack;
 
-    // Reference to PlayerUI and Shop UI close button
-    public GameObject PlayerUI;
-    public Button CloseButton; 
+    private Coroutine errorCoroutine; // Reference to track coroutine error message
 
-    // Tracks the shop state globally
-    public static bool isShopOpen = false;
+    private bool isNearShop = false; // Check if player is near the shop
+    public static bool isShopOpen = false; // Tracks the shop state globally
 
     [System.Obsolete]
     void Start()
     {
         playerCtrl = FindObjectOfType<PlayerCtrl>();
         playerAttack = FindObjectOfType<PlayerAttack>();
+
+        // Add listeners for the shop button clicks
+        ShopMoveSpeed.onClick.AddListener(() => playerCtrl.PurchaseMoveSpeed());
+        ShopDamage.onClick.AddListener(() => playerCtrl.PurchaseDamage());
+        ShopFireBlast.onClick.AddListener(() => playerCtrl.PurchaseFireBlast());
 
         // Find InteractionText inside PlayerUI if not assigned
         if (InteractionText == null && PlayerUI != null)
@@ -54,13 +61,16 @@ public class ShopInteraction : MonoBehaviour
         // Creates event listeners for the shop buffs by calling the player scripts
         if (ShopMoveSpeed != null)
         {
-            ShopMoveSpeed.onClick.AddListener(() => playerCtrl.BoostSpeed(15f, 1.5f)); // 15s, 1.5x speed
+            ShopMoveSpeed.onClick.AddListener(() => playerCtrl.BoostSpeed(15f, 1.4f)); // 15s, 1.4x speed
         }
 
         if (ShopDamage != null)
         {
             ShopDamage.onClick.AddListener(() => playerAttack.BoostDamage(20f)); // 20s, 2x damage boost
         }
+
+        // Initially hide the error message when the shop is opened
+        InvalidPurchaseText.gameObject.SetActive(false);
     }
 
     void Update()
@@ -72,6 +82,9 @@ public class ShopInteraction : MonoBehaviour
             {
                 ToggleShopUI();
                 TogglePlayerUI(ShopPanel.activeSelf);
+
+                // Initially hide the error message when shop opens
+                InvalidPurchaseText.gameObject.SetActive(false);
             }
             InteractionText.SetActive(true); // Show the interaction text
         }
@@ -120,6 +133,31 @@ public class ShopInteraction : MonoBehaviour
     {
         ShopPanel.SetActive(false);
         isShopOpen = false;
-        TogglePlayerUI(false); // Ensure PlayerUI is visible again
+        TogglePlayerUI(false); // Ensure Player UI is visible again
+    }
+
+    public void ShowErrorMessage(string message)
+    {
+        // Stop any previous running coroutine
+        if (errorCoroutine != null)
+        {
+            StopCoroutine(errorCoroutine);
+        }
+
+        // Show the error message and set the text
+        InvalidPurchaseText.gameObject.SetActive(true);
+        InvalidPurchaseText.text = message;
+
+        // Start the coroutine to hide the error message after a delay (2 seconds)
+        errorCoroutine = StartCoroutine(HideErrorMessage());
+    }
+
+    private IEnumerator HideErrorMessage()
+    {
+        // Wait for 2 seconds
+        yield return new WaitForSeconds(2f);
+
+        // Hide the error message after 2 seconds
+        InvalidPurchaseText.gameObject.SetActive(false);
     }
 }

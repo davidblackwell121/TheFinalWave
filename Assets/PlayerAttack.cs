@@ -54,9 +54,6 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator DamageBoostCoroutine(float duration)
     {
-        // Log when the damage boost starts
-        Debug.Log("Damage Boost Activated!");
-
         currentDamage = boostedDamage; // Damage is boosted while buffed
 
         float timeRemaining = duration;
