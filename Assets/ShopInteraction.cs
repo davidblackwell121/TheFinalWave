@@ -61,7 +61,7 @@ public class ShopInteraction : MonoBehaviour
         // Creates event listeners for the shop buffs by calling the player scripts
         if (ShopMoveSpeed != null)
         {
-            ShopMoveSpeed.onClick.AddListener(() => playerCtrl.BoostSpeed(15f, 1.4f)); // 15s, 1.4x speed
+            ShopMoveSpeed.onClick.AddListener(() => playerCtrl.BoostSpeed(15f, 1.5f)); // 15s, 1.5x speed
         }
 
         if (ShopDamage != null)

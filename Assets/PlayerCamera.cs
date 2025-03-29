@@ -6,6 +6,7 @@ public class PlayerCamera : MonoBehaviour
     public float smoothSpeed = 0.125f;
     public Vector3 offset; // Adjust this in the Inspector to control the camera position
 
+    // Updates the camera position every second to follow around the player
     void LateUpdate()
     {
         if (target != null)

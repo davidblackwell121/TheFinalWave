@@ -10,6 +10,8 @@ public class PlayerCtrl : MonoBehaviour
 
     public bool hasFireBlast = false; // Flag to check if the player has fire blast powerup
 
+    private Coroutine speedBoostCoroutine;
+
     UIManager uiManager; // Reference to the UIManager script
     Rigidbody2D rb; // RigidBody variable
 
@@ -82,20 +84,30 @@ public class PlayerCtrl : MonoBehaviour
     }
 
     // Purchase MoveSpeed (called when the player clicks the MoveSpeed button in the shop)
+    [System.Obsolete]
     public void PurchaseMoveSpeed()
     {
         if (uiManager.DeductCoins(100)) // Deduct 100 coins
         {
             Debug.Log("Move speed boost purchased!");
         }
+        else
+        {
+            FindObjectOfType<ShopInteraction>().ShowErrorMessage("Not Enough Coins!");
+        }
     }
 
     // Purchase Damage (called when the player clicks the Damage button in the shop)
+    [System.Obsolete]
     public void PurchaseDamage()
     {
         if (uiManager.DeductCoins(200)) // Deduct 200 coins
         {
             Debug.Log("Damage boost purchased!");
+        }
+        else
+        {
+            FindObjectOfType<ShopInteraction>().ShowErrorMessage("Not Enough Coins!");
         }
     }
 
@@ -104,17 +116,22 @@ public class PlayerCtrl : MonoBehaviour
     public void PurchaseFireBlast()
     {
         if (hasFireBlast)
-        {
-            // Show the error message in the Shop UI
-            ShopInteraction shopInteraction = FindObjectOfType<ShopInteraction>();
-            shopInteraction.ShowErrorMessage("Fire Blast Limit Reached!");
+        { 
+            FindObjectOfType<ShopInteraction>().ShowErrorMessage("Fire Blast Limit Reached!");
             return; // Prevent purchasing the powerup if already owned
         }
 
-        if (uiManager.DeductCoins(400)) // Deduct 400 coins
+        bool purchaseSuccess = uiManager.DeductCoins(400);
+
+        if (purchaseSuccess) // Deduct 400 coins when the purchase is successful
         {
             hasFireBlast = true; // Grant the player the FireBlast power-up
             Debug.Log("Fire Blast power-up purchased!");
+        }
+        else
+        {
+            // Error message is shown when the powerup can't be purchased
+            FindObjectOfType<ShopInteraction>().ShowErrorMessage("Not Enough Coins!");
         }
     }
 
@@ -122,16 +139,21 @@ public class PlayerCtrl : MonoBehaviour
     // using a coroutine, allowing a value to be updated each frame within Unity
     public void BoostSpeed(float duration, float speedMultiplier)
     {
-        StartCoroutine(SpeedBoostCoroutine(duration, speedMultiplier));
+        // Prevents overlapping buffs when purchasing multiple from the shop
+        if (speedBoostCoroutine != null)
+        {
+            StopCoroutine(speedBoostCoroutine); // Stop the existing coroutine
+            moveSpeed = originalSpeed; // Reset speed before applying the new boost
+        }
+
+        speedBoostCoroutine = StartCoroutine(SpeedBoostCoroutine(duration, speedMultiplier));
     }
 
     private IEnumerator SpeedBoostCoroutine(float duration, float speedMultiplier)
     {
         moveSpeed *= speedMultiplier; // Speed multiplied during buff duration
 
-        float timeRemaining = duration;
-
-        while (timeRemaining > 0)
+        while (duration > 0)
         {
             // Wait for 1 second before decreasing the buff timer instead of running continuously
             yield return new WaitForSeconds(1f);
@@ -143,10 +165,11 @@ public class PlayerCtrl : MonoBehaviour
             }
 
             // Decrease the remaining time by 1 second
-            timeRemaining -= 1f;
+            duration -= 1f;
         }
 
         moveSpeed = originalSpeed; // Changes the movespeed back to the original speed
+        speedBoostCoroutine = null; // Clear the coroutine reference
 
         // Log when the speed boost ends
         Debug.Log("Move Speed Boost Ended.");

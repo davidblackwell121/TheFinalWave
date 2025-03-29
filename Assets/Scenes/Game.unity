@@ -363,6 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d746c0f47c94ba64d847e61eaa03794c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerUI: {fileID: 1484683237}
   ShopUI: {fileID: 263792671}
   ShopPanel: {fileID: 1879170309}
   InteractionText: {fileID: 1443086244}
@@ -370,7 +371,6 @@ MonoBehaviour:
   ShopFireBlast: {fileID: 576988916}
   ShopMoveSpeed: {fileID: 1304087888}
   ShopDamage: {fileID: 394124216}
-  PlayerUI: {fileID: 1484683237}
   CloseButton: {fileID: 1973114021}
 --- !u!1 &248858696
 GameObject:
@@ -481,7 +481,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0, g: 0.203542, b: 1, a: 1}
+  m_Color: {r: 0.63234246, g: 0.6919254, b: 0.9245283, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -95552,7 +95552,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -96485,7 +96485,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0

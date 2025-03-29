@@ -8,6 +8,8 @@ public class PlayerAttack : MonoBehaviour
     private float currentDamage = 1f; // Default damage with no buffs
     private float boostedDamage = 2f; // Boosted damage value with buffs
 
+    private Coroutine damageBoostCoroutine;
+
     // Update is called once per frame
     void Update()
     {
@@ -49,16 +51,20 @@ public class PlayerAttack : MonoBehaviour
     // using a coroutine, allowing a value to be updated each frame within Unity
     public void BoostDamage(float duration)
     {
-        StartCoroutine(DamageBoostCoroutine(duration));
+        // Prevents overlapping buffs when purchasing multiple from the shop
+        if (damageBoostCoroutine != null)
+        {
+            StopCoroutine(damageBoostCoroutine); // Stop the existing coroutine
+        }
+
+        damageBoostCoroutine = StartCoroutine(DamageBoostCoroutine(duration));
     }
 
     private IEnumerator DamageBoostCoroutine(float duration)
     {
         currentDamage = boostedDamage; // Damage is boosted while buffed
 
-        float timeRemaining = duration;
-
-        while (timeRemaining > 0)
+        while (duration > 0)
         {
             // Wait for 1 second before decreasing the buff timer instead of running continuously
             yield return new WaitForSeconds(1f);
@@ -70,10 +76,11 @@ public class PlayerAttack : MonoBehaviour
             }
 
             // Decrease the remaining time of the buff by 1 second
-            timeRemaining -= 1f;
+            duration -= 1f;
         }
 
         currentDamage = 1f; // Reset damage after the buff duration expires
+        damageBoostCoroutine = null; // Clear coroutine reference
 
         // Log when the damage boost ends
         Debug.Log("Damage Boost Ended.");
